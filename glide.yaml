@@ -1,0 +1,20 @@
+package: github.com/btccom/btcsigner
+import:
+- package: github.com/btcsuite/btcd
+  version: 2e60448ffcc6bf78332d1fe590260095f554dd78
+  vcs: git
+  subpackages:
+  - chaincfg
+  - chaincfg/chainhash
+  - txscript
+  - wire
+  - btcjson
+- package: github.com/btcsuite/btcutil
+- package: github.com/btcsuite/fastsha256
+- package: github.com/pkg/errors
+
+testImport:
+- package: github.com/stretchr/testify
+  version: ^1.1.4
+  subpackages:
+  - assert
