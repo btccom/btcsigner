@@ -17,6 +17,15 @@ const (
 	NetBtcRegtest = "rbtc"
 
 	// NetBch is the constant for the bitcoin cash network
+	NetLtc = "ltc"
+
+	// NetLtcTest is the constant for the bitcoin cash testnet network
+	NetLtcTest = "tltc"
+
+	// NetLtcRegtest is the constant for the bitcoin cash regtest network
+	NetLtcRegtest = "rltc"
+
+	// NetBch is the constant for the bitcoin cash network
 	NetBch = "bch"
 
 	// NetBchTest is the constant for the bitcoin cash testnet network
@@ -29,7 +38,9 @@ const (
 // CheckNetwork validates that the network is valid
 func CheckNetwork(network string) (string, error) {
 	switch network {
-	case NetBtc, NetBtcTest, NetBtcRegtest, NetBch, NetBchTest, NetBchRegtest:
+	case NetBtc, NetBtcTest, NetBtcRegtest,
+		NetLtc, NetLtcTest, NetLtcRegtest,
+		NetBch, NetBchTest, NetBchRegtest:
 		return network, nil
 	default:
 		return "", errors.New("Network is invalid")
@@ -86,6 +97,30 @@ var (
 		SegwitEnabled:   true,
 	}
 
+	// LtcNetwork defines the behaviour on the Bitcoin Cash network
+	LtcNetwork = &Network{
+		Params:          &chaincfg.MainNetParams,
+		CheckerCreator:  BitcoinCheckerCreator,
+		DefaultHashType: txscript.SigHashAll,
+		SegwitEnabled:   true,
+	}
+
+	// LtcTestNetwork defines the behaviour on the Bitcoin Cash testnet
+	LtcTestNetwork = &Network{
+		Params:          &chaincfg.TestNet3Params,
+		CheckerCreator:  BitcoinCheckerCreator,
+		DefaultHashType: txscript.SigHashAll,
+		SegwitEnabled:   true,
+	}
+
+	// LtcRegtestNetwork defines the behavior on the Bitcoin Cash regtest network
+	LtcRegtestNetwork = &Network{
+		Params:          &chaincfg.RegressionNetParams,
+		CheckerCreator:  BitcoinCheckerCreator,
+		DefaultHashType: txscript.SigHashAll,
+		SegwitEnabled:   true,
+	}
+
 	// BchNetwork defines the behaviour on the Bitcoin Cash network
 	BchNetwork = &Network{
 		Params:          &chaincfg.MainNetParams,
@@ -121,6 +156,12 @@ func GetNetworkParams(network string) (*Network, error) {
 		return BtcTestNetwork, nil
 	case NetBtcRegtest:
 		return BtcRegtestNetwork, nil
+	case NetLtc:
+		return LtcNetwork, nil
+	case NetLtcTest:
+		return LtcTestNetwork, nil
+	case NetLtcRegtest:
+		return LtcRegtestNetwork, nil
 	case NetBch:
 		return BchNetwork, nil
 	case NetBchTest:
