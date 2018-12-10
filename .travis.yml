@@ -1,0 +1,16 @@
+language: go
+branches:
+  only:
+  - master
+
+env:
+  - GO111MODULE=on
+
+go:
+- 1.11.x
+- master
+cache:
+  directories: "${TRAVIS_BUILD_DIR}/vendor"
+
+script:
+- make test test-race
