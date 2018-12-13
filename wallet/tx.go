@@ -347,11 +347,17 @@ func (input *InputSigner) Init(params *chaincfg.Params, txSigHashes *txscript.Tx
 func (input *InputSigner) SignFinal(hashType txscript.SigHashType, signer SignatureProvider) ([]*TxSignature, error) {
 	input.Lock()
 	defer input.Unlock()
-	signed, sigs, err := input.sign(hashType, signer)
+	_, sigs, err := input.sign(hashType, signer)
 	if err != nil {
 		return nil, err
 	}
-	if signed != input.fqs.sign.NumSigs {
+	numSigned := 0
+	for _, sig := range input.sigs {
+		if sig != nil {
+			numSigned++
+		}
+	}
+	if numSigned != input.fqs.sign.NumSigs {
 		return nil, errors.Errorf("Unable to sign input %d", input.nInput)
 	}
 	return sigs, nil
