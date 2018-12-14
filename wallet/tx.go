@@ -1,6 +1,7 @@
 package wallet
 
 import (
+	"fmt"
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
@@ -328,7 +329,7 @@ func (input *InputSigner) Init(params *chaincfg.Params, txSigHashes *txscript.Tx
 	if err != nil {
 		return err
 	}
-
+	fmt.Printf("extractyed %d keys, %d sigs\n", len(keys), len(sigs))
 	input.tx = tx
 	input.nInput = nInput
 	input.fqs = fqs
