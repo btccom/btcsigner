@@ -391,7 +391,7 @@ func (input *InputSigner) sign(hashType txscript.SigHashType, signer SignaturePr
 		}
 
 		if signed >= input.fqs.sign.NumSigs {
-			fmt.Printf("already have num sigs, done\n", i)
+			fmt.Printf("already have num sigs, done %d \n", i)
 			continue
 		}
 
