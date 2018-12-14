@@ -402,13 +402,14 @@ func (input *InputSigner) sign(hashType txscript.SigHashType, signer SignaturePr
 		}
 
 		pub, signature, known, err := signer.Sign(solution, hash)
-		if err != nil {
-			fmt.Printf("some error")
-			return 0, nil, err
-		}
 		if !known {
 			fmt.Printf("signer said key was unknown!")
 			continue
+		}
+
+		if err != nil {
+			fmt.Printf("some error")
+			return 0, nil, err
 		}
 
 		// public key hash scripts don't have this
