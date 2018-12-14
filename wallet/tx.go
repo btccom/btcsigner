@@ -329,7 +329,7 @@ func (input *InputSigner) Init(params *chaincfg.Params, txSigHashes *txscript.Tx
 	if err != nil {
 		return err
 	}
-	fmt.Printf("extractyed %d keys, %d sigs\n", len(keys), len(sigs))
+	fmt.Printf("extracted %d keys, %d sigs\n", len(keys), len(sigs))
 	input.tx = tx
 	input.nInput = nInput
 	input.fqs = fqs
@@ -358,6 +358,8 @@ func (input *InputSigner) SignFinal(hashType txscript.SigHashType, signer Signat
 			numSigned++
 		}
 	}
+	fmt.Printf("SignFinal. added sigs %d\n", len(sigs))
+	fmt.Printf("SignFinal. numSigs %d\n", numSigned)
 	if numSigned != input.fqs.sign.NumSigs {
 		return nil, errors.Errorf("Signature on input %d was not final: contained %d of %d", input.nInput, numSigned, input.fqs.sign.NumSigs)
 	}
@@ -371,6 +373,8 @@ func (input *InputSigner) Sign(hashType txscript.SigHashType, signer SignaturePr
 	input.Lock()
 	defer input.Unlock()
 	_, sigs, err := input.sign(hashType, signer)
+	fmt.Printf("Sign. added sigs %d\n", len(sigs))
+
 	return sigs, err
 }
 
@@ -379,26 +383,32 @@ func (input *InputSigner) sign(hashType txscript.SigHashType, signer SignaturePr
 	signed := 0
 
 	for i, solution := range input.fqs.sign.Addresses {
+		fmt.Printf("addr %d\n", i)
 		if input.sigs[i] != nil {
+			fmt.Printf("signer %d already signed\n", i)
 			signed++
 			continue
 		}
 
 		if signed >= input.fqs.sign.NumSigs {
+			fmt.Printf("already have num sigs, done\n", i)
 			continue
 		}
 
 		hash, err := input.checker.GetSigHash(input.fqs.sign.Script, hashType, input.fqs.sigVersion)
 		if err != nil {
+			fmt.Printf("error producing script hash\n")
 			return 0, nil, err
 		}
 
 		pub, signature, known, err := signer.Sign(solution, hash)
-		if !known {
-			continue
-		}
 		if err != nil {
+			fmt.Printf("some error")
 			return 0, nil, err
+		}
+		if !known {
+			fmt.Printf("signer said key was unknown!")
+			continue
 		}
 
 		// public key hash scripts don't have this
