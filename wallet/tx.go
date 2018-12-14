@@ -352,6 +352,7 @@ func (input *InputSigner) SignFinal(hashType txscript.SigHashType, signer Signat
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("sigs: %+v\n", sigs)
 	numSigned := 0
 	for _, sig := range input.sigs {
 		if sig != nil {
