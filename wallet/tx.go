@@ -358,7 +358,7 @@ func (input *InputSigner) SignFinal(hashType txscript.SigHashType, signer Signat
 		}
 	}
 	if numSigned != input.fqs.sign.NumSigs {
-		return nil, errors.Errorf("Unable to sign input %d", input.nInput)
+		return nil, errors.Errorf("Signature on input %d was not final: contained %d of %d", input.nInput, numSigned, input.fqs.sign.NumSigs)
 	}
 	return sigs, nil
 }
